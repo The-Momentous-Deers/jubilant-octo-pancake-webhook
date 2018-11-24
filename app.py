@@ -29,7 +29,7 @@ def webhook():
 
 
 def processRequest(req):
-    res = req.get("result")
+    res = req.get("queryResult")
     act = res.get("action")
     if act == "bankbalance":
         print("Hello, Bank Balance PLS!")
