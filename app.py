@@ -6,7 +6,8 @@ from flask import request
 from flask import make_response
 
 import json, time, pprint
-from urllib.request import *
+import urlopen
+import Request
 
 # Flask app should start in global layout
 app = Flask(__name__)
