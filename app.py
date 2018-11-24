@@ -69,8 +69,7 @@ def makeWebhookResult(message):
     print(speech)
 
     return {
-        "speech": speech,
-        "displayText": speech,
+        "fulfillmentText": speech,
     }
 
 
