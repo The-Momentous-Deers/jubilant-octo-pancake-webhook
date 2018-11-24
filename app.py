@@ -32,7 +32,7 @@ def processRequest(req):
     res = req.get("result")
     act = res.get("action")
     if act == "bankbalance":
-        print("Hello, Bank Balance PLS!"
+        print("Hello, Bank Balance PLS!")
     baseurl = "https://query.yahooapis.com/v1/public/yql?"
     yql_query = makeYqlQuery(req)
     if yql_query is None:
