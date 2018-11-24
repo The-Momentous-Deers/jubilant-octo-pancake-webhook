@@ -11,7 +11,7 @@ custom_fetch = lambda method, relative_url, body=None: json.loads(urlopen(Reques
 api_key = 'ayzmam4ta3uu3n1quuvq8u0m3kcl4vnx#6sipzuhpoemrwr1kvcgxe0dtjnneryjg0lngqbq9l777j89jsv8th28pferkt43g'
 
 
-class railsbankinterface:
+class RailsbankRequest:
 
     def __init__(self):
         # This needs to fetch the relevant data from the database
@@ -29,10 +29,10 @@ class railsbankinterface:
                 'holder_id': self.enduser_id,
                 'asset_class': 'currency',
                 'asset_type': 'eur',
-                'iban': 'SK4402005678901234567890',
-                'bic_swift': 'SUBASKBX',
-                #'uk_account_number': '12345678',
-                #'uk_sort_code': '123434',
+                #'iban': 'SK4402005678901234567890',
+                #'bic_swift': 'SUBASKBX',
+                'uk_account_number': '12345678',
+                'uk_sort_code': '123434',
                 'person': {
                     'name': 'Peter',
                     'address': {
@@ -53,52 +53,30 @@ class railsbankinterface:
 
 
     def getEnduser(self):
-        #response = post(
-        #    'v1/customer/endusers', {
-        #        'person': {
-        #            'name': 'Jane',
-        #            'email': 'jane@email.com',
-        #            'address': {
-        #                'address_iso_country': 'GB',
-        #                'address_postal_code': 'PO5 1OD',
-        #                'address_number': '420'
-        #            }
-        #        }
-        #    })
         response = post(
             'v1/customer/endusers', {
-                "person": {
-                    "name": "John Smith",
-                    "email": "johnsmith@gmail.com",
-                    "date_of_birth": "1970-11-05",
-                    "telephone": "+44 22 626 2626",
-                    "address": {
-                        "address_refinement": "Apartment 42",
-                        "address_number": "29",
-                        "address_street": "Acacia Road",
-                        "address_city": "London",
-                        "address_postal_code": "FX20 7XS",
-                        "address_iso_country": "GBR"
-                    },
-                    "address_history": [ {"address_refinement": "Apartment 77", "address_number": "42", "address_street": "Kirschbaumstraße", "address_city": "Berlin", "address_postal_code": "12059", "address_iso_country": "DE", "address_start_date": "2000-09-02", "address_end_date": "2002-12-20"}],
-                    "nationality": ["British"],
-                    "country_of_residence": ["GBR"],
-                    "date_onboarded": "2015-11-21"
-                }, 
-                "enduser_meta": {
-                "foo": "baa",
-                "our_salesforce_reference": "http://na1.salesforce.com/5003000000D8cuI"
+                'person': {
+                    'name': 'Jane',
+                    'email': 'jane@email.com',
+                    'address': {
+                        'address_iso_country' : 'GB',
+                        'address_postal_code' : 'POS COD',
+                        'address_number' : '420'
+                    }
                 }
-                })
-        pprint.pprint("\nPrinting post enduser response\n")
-        pprint.pprint(response)
-        self.enduser_id = response['enduser_id']
+            })
+
+        #pprint.pprint("\nPrinting post enduser response\n")
+        #pprint.pprint(response)
+        #self.enduser_id = response['enduser_id']
 
         '''
         Enduser is not ready immediately because of ongoing validity checks.
         '''
-        response = get('v1/customer/endusers/' + str(self.enduser_id) + '/wait')
-        pprint.pprint(response)
+        #response = get('v1/customer/endusers/' + str(self.enduser_id) + '/wait')
+        #pprint.pprint(response)
+
+
 
     def makeLedger(self):
         '''
@@ -252,12 +230,8 @@ class railsbankinterface:
 
 if __name__ == "__main__":
     myrequest = RailsbankRequest()
-
     # These are for getting the balance.
-
     myrequest.getEnduser()
-
-
     #yrequest.makeLedger()
     #myrequest.addMoney() #not needed
     #myrequest.getBalance()
