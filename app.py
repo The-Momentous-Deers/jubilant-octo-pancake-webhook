@@ -34,9 +34,9 @@ def processRequest(req):
     data = None
     if act == "bankbalance":
         print("Hello, Bank Balance PLS!")
-        data = RailsbankRequest().getBalance()
-    
-    res = makeWebhookResult("You balance is " + str(data) + " pounds")
+        res = makeWebhookResult(RailsbankRequest().getBalance())
+    else:
+        res = makeWebhookResult("Sorry, Not sure what you mean")    
     return res
 
 base_url = 'https://play.railsbank.com/'
@@ -58,16 +58,10 @@ class RailsbankRequest:
 
     def getBalance(self):
         response = get('v1/customer/ledgers/' + str(self.ledger_id))
-        return response['amount']
+        return "Your balance is " + str(response['amount']) + " pounds."
 
 
-def makeWebhookResult(message):
-    
-    speech = message
-
-    print("Response:")
-    print(speech)
-
+def makeWebhookResult(speech):
     return {
         "fulfillmentText": speech,
     }
