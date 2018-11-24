@@ -20,37 +20,6 @@ class RailsbankRequest:
         # pprint.pprint(response)
         self.customer_id = response['customer_id']
 
-    def makeBeneficiary(self):
-        '''
-        Creating beneficiary for our enduser.
-        '''
-        response = post(
-            'v1/customer/beneficiaries', {
-                'holder_id': self.enduser_id,
-                'asset_class': 'currency',
-                'asset_type': 'eur',
-                #'iban': 'SK4402005678901234567890',
-                #'bic_swift': 'SUBASKBX',
-                'uk_account_number': '12345678',
-                'uk_sort_code': '123434',
-                'person': {
-                    'name': 'Peter',
-                    'address': {
-                        'address_iso_country': 'GB',
-                        'address_postal_code': "PO5 1OD",
-                        'address_number': "420"
-                    },
-                    'email': 'peter@email.com'
-                }
-            })
-        pprint.pprint(response)
-        self.beneficiary_id = response['beneficiary_id']
-
-        '''
-        Beneficiary is not ready immediately because of ongoing validity checks.
-        '''
-        response = get('v1/customer/beneficiaries/' + str(self.beneficiary_id) + '/wait')
-
 
     def getEnduser(self):
         response = post(
@@ -75,7 +44,6 @@ class RailsbankRequest:
         '''
         #response = get('v1/customer/endusers/' + str(self.enduser_id) + '/wait')
         #pprint.pprint(response)
-
 
 
     def makeLedger(self):
@@ -126,9 +94,52 @@ class RailsbankRequest:
         #pprint.pprint(response)
 
 
+
+
+
     def getBalance(self):
         response = get('v1/customer/ledgers/' + str(self.ledger_id))
         pprint.pprint(response["amount"])
+
+        
+
+    def makeBeneficiary(self):
+        '''
+        Creating beneficiary for our enduser.
+        '''
+        response = post(
+            'v1/customer/beneficiaries', {
+                'holder_id': self.enduser_id,
+                'asset_class': 'currency',
+                'asset_type': 'eur',
+                #'iban': 'SK4402005678901234567890',
+                #'bic_swift': 'SUBASKBX',
+                'uk_account_number': '12345678',
+                'uk_sort_code': '123434',
+                'person': {
+                    'name': 'Peter',
+                    'address': {
+                        'address_iso_country': 'GB',
+                        'address_postal_code': "PO5 1OD",
+                        'address_number': "420"
+                    },
+                    'email': 'peter@email.com'
+                }
+            })
+        pprint.pprint(response)
+        self.beneficiary_id = response['beneficiary_id']
+
+        '''
+        Beneficiary is not ready immediately because of ongoing validity checks.
+        '''
+        response = get('v1/customer/beneficiaries/' + str(self.beneficiary_id) + '/wait')
+
+
+
+
+
+
+
 
     def makePayment(self):
         '''
