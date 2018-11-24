@@ -45,7 +45,7 @@ base_url = 'https://play.railsbank.com/'
 custom_fetch = lambda method, relative_url, body=None: json.loads(urlopen(Request(base_url+relative_url, data=json.dumps(body).encode('utf8'), method=method, headers={'Content-Type': 'application/json', 'Authorization': 'API-Key ' + api_key, 'Accept': 'application/json'})).read().decode('utf-8')); post = lambda url, body=None: custom_fetch("POST", url, body); get = lambda url: custom_fetch("GET", url); put = lambda url, body=None: custom_fetch("PUT", url, body)
 
 # Make sure to replace `***EXAMPLE KEY***` in the next line with your api key of form <key_id>#<key_secret>
-api_key = 'iyg7oiwx5c6t462y80vytq0qtotredni#u9cgcudk4b95czmprv809jmb2ltkd971j0d3npvgq9vxfelrfylcg3x3hn0a8siy'
+api_key = os.environ.get('API_KEY', None)
 
 class RailsbankRequest:
 
