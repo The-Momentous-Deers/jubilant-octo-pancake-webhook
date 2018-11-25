@@ -39,7 +39,6 @@ def processRequest(req):
     parameters = res.get("parameters")
     outcontext = res.get("outputContexts")
     session = req.get("session")
-    print(outcontext)
 
     interface.enduser_id = ""
     interface.ledger_id = ""
@@ -49,8 +48,8 @@ def processRequest(req):
         try:
             auth = False
             contextpath = "projects/jubilant-octo-pancake-96395/agent/sessions/"+str(session)+"/contexts/id"
-            print(contextpath)
             context = next(item for item in contexts if item["name"] == contextpath)
+            print(context)
             interface.enduser_id = outcontext[0]['parameters']['enduser_id']
             interface.ledger_id = outcontext[0]['parameters']['ledger_id']
             print("Authenticated")
