@@ -48,7 +48,7 @@ def processRequest(req):
         print("Authenticating")
         name = parameters.get("given-name") + " " + parameters.get("last-name") 
         dbmanagerResponse = dbmanager.validatePassword(name, parameters.get("password"))
-        res = makeWebhookResult(dbmanagerResponse['data']['msg'], {userStorage: dbmanagerResponse['id']})
+        res = makeWebhookResult(dbmanagerResponse['data']['msg'], {"userStorage": dbmanagerResponse['id']})
     else:
         res = makeWebhookResult("Sorry, Not sure what you mean")    
     return res
