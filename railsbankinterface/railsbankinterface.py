@@ -98,6 +98,8 @@ class RailsbankRequest:
         #response = get('v1/customer/transactions/' + str(transaction_receive_id))
         #pprint.pprint(response)
 
+
+
     def fetchLedger(self):
         response = get('v1/customer/endusers/'+self.enduser_id)
         ledgerlist=response["ledgers"]
@@ -106,82 +108,6 @@ class RailsbankRequest:
         pprint.pprint(ledgerlist)
         pprint.pprint("self.ledger_id = " + self.ledger_id)
 
-
-
-    def getBalance(self):
-        response = get('v1/customer/ledgers/' + str(self.ledger_id))
-        pprint.pprint(response["amount"])
-
-
-
-    def makeBeneficiary(self):
-        '''
-        Creating beneficiary for our enduser.
-        '''
-        response = post(
-            'v1/customer/beneficiaries', {
-                'holder_id': self.enduser_id,
-                'asset_class': 'currency',
-                'asset_type': 'eur',
-                #'iban': 'SK4402005678901234567890',
-                #'bic_swift': 'SUBASKBX',
-                'uk_account_number': '12345678',
-                'uk_sort_code': '123434',
-                'person': {
-                    'name': 'Peter',
-                    'address': {
-                        'address_iso_country': 'GB',
-                        'address_postal_code': "PO5 1OD",
-                        'address_number': "420"
-                    },
-                    'email': 'peter@email.com'
-                }
-            })
-        pprint.pprint(response)
-        self.beneficiary_id = response['beneficiary_id']
-
-        '''
-        Beneficiary is not ready immediately because of ongoing validity checks.
-        '''
-        response = get('v1/customer/beneficiaries/' + str(self.beneficiary_id) + '/wait')
-
-
-    def makePayment(self):
-        '''
-        Creating 2 euro transaction from the ledger to the beneficiary.
-        '''
-        response = post(
-            'v1/customer/transactions', {
-                'ledger_from_id': self.ledger_id,
-                'beneficiary_id': self.beneficiary_id,
-                'payment_type': 'payment-type-EU-SEPA-Step2',
-                'amount': '2'
-                })
-        pprint.pprint(response)
-        transaction_id = response['transaction_id']
-
-        '''
-        We need to wait for the transaction to be approved.
-        '''
-        time.sleep(10)
-        response = get('v1/customer/transactions/' + str(transaction_id))
-        pprint.pprint(response)
-
-
-    def addMoney(self):
-        response = post(
-            'dev/customer/transactions/receive', {
-                'amount': 10,
-                'uk_account_number': '12345678',
-                'uk_sort_code': '123434'
-            })
-        '''
-        We need to wait for the transaction to be approved.
-        '''
-        transaction_receive_id = response['transaction_id']
-        time.sleep(10)
-        response = get('v1/customer/transactions/' + str(transaction_receive_id))
-        pprint.pprint(response)
 
 
     def requestcard(self):
@@ -224,28 +150,119 @@ class RailsbankRequest:
         pprint.pprint(self.ledger_id)
         pprint.pprint("\nISSUEING CARD\n")
         response = post(
-        'v1/customer/cards',  {
-            "ledger_id": self.ledger_id,
-            "partner_product": "Railsbank-Debit-Card-1",
-            "card_programme": "openbankhack18"
+            'v1/customer/cards',  {
+                "ledger_id": self.ledger_id,
+                "partner_product": "Railsbank-Debit-Card-1",
+                "card_programme": "openbankhack18"
             })#returns "card_id": {card id}
         self.card_id = response["card_id"]
         pprint.pprint('self.card_id = ')
         pprint.pprint(self.card_id)
-        #Make sure that you have rails-bank debit card bought
+        '''#Make sure that you have rails-bank debit card bought
         #activating cards
         pprint.pprint('v1/customer/cards/'+self.card_id+'/activate')
         #response = post('v1/customer/cards/'+self.card_id+'/activate')
         #post('v1/customer/cards/'+self.card_id+'/activate')
 
-        #get('v1/customer/cards/'+self.card_id)
+        #get('v1/customer/cards/'+self.card_id)'''
 
 
+        pprint.pprint(response)
+        #response = get https://live.railsbank.com/v1/customer/cards/{{card_id}}
+
+
+
+    def fetchCard(self):
+        response = get('v1/customer/cards')
+        pprint.pprint(response)
+        self.card_id = response[0]['card_id']
+        pprint.pprint('self.card_id = '+self.card_id)
+
+
+
+    def activateCard(self):
+        response = post('v1/customer/cards/'+self.card+'/activate')
+        pprint.pprint(response["card_status"])
+
+
+
+    def getBalance(self):
+        response = get('v1/customer/ledgers/' + str(self.ledger_id))
+        pprint.pprint(response["amount"])
+
+
+
+    def makeBeneficiary(self):
+        '''
+        Creating beneficiary for our enduser.
+        '''
+        response = post(
+            'v1/customer/beneficiaries', {
+                'holder_id': self.enduser_id,
+                'asset_class': 'currency',
+                'asset_type': 'eur',
+                #'iban': 'SK4402005678901234567890',
+                #'bic_swift': 'SUBASKBX',
+                'uk_account_number': '12345678',
+                'uk_sort_code': '123434',
+                'person': {
+                    'name': 'Peter',
+                    'address': {
+                        'address_iso_country': 'GB',
+                        'address_postal_code': "PO5 1OD",
+                        'address_number': "420"
+                    },
+                    'email': 'peter@email.com'
+                }
+            })
+        pprint.pprint(response)
+        self.beneficiary_id = response['beneficiary_id']
+
+        '''
+        Beneficiary is not ready immediately because of ongoing validity checks.
+        '''
+        response = get('v1/customer/beneficiaries/' + str(self.beneficiary_id) + '/wait')
+
+
+
+    def makePayment(self):
+        '''
+        Creating 2 euro transaction from the ledger to the beneficiary.
+        '''
+        response = post(
+            'v1/customer/transactions', {
+                'ledger_from_id': self.ledger_id,
+                'beneficiary_id': self.beneficiary_id,
+                'payment_type': 'payment-type-EU-SEPA-Step2',
+                'amount': '2'
+                })
+        pprint.pprint(response)
+        transaction_id = response['transaction_id']
+
+        '''
+        We need to wait for the transaction to be approved.
+        '''
+        time.sleep(10)
+        response = get('v1/customer/transactions/' + str(transaction_id))
         pprint.pprint(response)
 
 
 
-        #response = get https://live.railsbank.com/v1/customer/cards/{{card_id}}
+    def addMoney(self):
+        response = post(
+            'dev/customer/transactions/receive', {
+                'amount': 10,
+                'uk_account_number': '12345678',
+                'uk_sort_code': '123434'
+            })
+        '''
+        We need to wait for the transaction to be approved.
+        '''
+        transaction_receive_id = response['transaction_id']
+        time.sleep(10)
+        response = get('v1/customer/transactions/' + str(transaction_receive_id))
+        pprint.pprint(response)
+
 
 
 if __name__ == "__main__":
@@ -268,3 +285,7 @@ if __name__ == "__main__":
     #get req_card
     print("\nRequesting Card\n")
     myrequest.requestcard()
+    print("\nFetching Card\n")
+    myrequest.fetchCard()
+    print("\nActivating Card\n")
+    myrequest.activateCard()
