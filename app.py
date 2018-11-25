@@ -15,7 +15,7 @@ from db_interface import *
 # Flask app should start in global layout
 app = Flask(__name__)
 interface = RailsbankRequest()
-dbmanager = DbManager()
+odbmanager = DbManager()
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
@@ -46,7 +46,8 @@ def processRequest(req):
         res = makeWebhookResult(interface.makeBeneficiary(res.get("IBAN"), res.get("BIC"), res.get("given-name")))
     elif act == "auth":
         print("Authenticating")
-        dbmanagerResponse = dbmanager.validatePassword(res.get("name"), res.get("password"))
+        name = str(res.get("given-name") + " " + res.get("last-name")) 
+        dbmanagerResponse = dbmanager.validatePassword(name, res.get("password"))
         res = makeWebhookResult(dbmanagerResponse.data.msg, {userStorage: dbmanagerResponse.id})
     else:
         res = makeWebhookResult("Sorry, Not sure what you mean")    
