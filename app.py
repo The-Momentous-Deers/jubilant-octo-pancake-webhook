@@ -70,7 +70,7 @@ def processRequest(req):
                 "lifespanCount": 5, 
                 "parameters": {
                     "enduser_id": dbmanagerResponse['id'],
-                    "ledger_id": dbmanangerResponse['ledger_id']
+                    "ledger_id": dbmanagerResponse['ledger_id']
                 }
             }
         ]
