@@ -24,8 +24,8 @@ class RailsbankRequest:
         pprint.pprint("self.enduser_id = " + self.enduser_id)
 
 
-    '''#Dont uncomment this code as we have a limit on the number of endusers
-    def getEnduser(self):
+
+    def makeEnduser(self):
         response = post(
             'v1/customer/endusers', {
                 'person': {
@@ -48,7 +48,11 @@ class RailsbankRequest:
         """
         #response = get('v1/customer/endusers/' + str(self.enduser_id) + '/wait')
         #pprint.pprint(response)
-    '''#Dont uncomment this code as we have a limit on the number of endusers
+
+
+    #def fetchEnduser(self):
+    #    response = get('v1/customer/endusers/' + self.enduser_id)
+
 
 
 
@@ -102,11 +106,23 @@ class RailsbankRequest:
 
     def fetchLedger(self):
         response = get('v1/customer/endusers/'+self.enduser_id)
+        pprint.pprint("Printing Fetch Ledger Response")
+        pprint.pprint(response)
         ledgerlist=response["ledgers"]
         self.ledger_id = ledgerlist[0]['ledger_id']
+        #self.holder_id = response['holder_id']
+        #pprint.pprint("All holder_id = " + self.holder_id)
+        pprint.pprint("All customer_id = " + self.customer_id)
         pprint.pprint("All ledgers are")
         pprint.pprint(ledgerlist)
         pprint.pprint("self.ledger_id = " + self.ledger_id)
+
+
+
+    def showLedger(self):
+        response = get('v1/customer/ledgers/' + self.ledger_id + '/wait')
+        pprint.pprint("PRINTING LEDGER INFO")
+        pprint.pprint(response)
 
 
 
@@ -154,21 +170,20 @@ class RailsbankRequest:
                 "ledger_id": self.ledger_id,
                 "partner_product": "Railsbank-Debit-Card-1",
                 "card_programme": "openbankhack18"
-            })#returns "card_id": {card id}
+                })#returns "card_id": {card id}
         self.card_id = response["card_id"]
         pprint.pprint('self.card_id = ')
         pprint.pprint(self.card_id)
-        '''#Make sure that you have rails-bank debit card bought
+        #Make sure that you have rails-bank debit card bought
         #activating cards
         pprint.pprint('v1/customer/cards/'+self.card_id+'/activate')
         #response = post('v1/customer/cards/'+self.card_id+'/activate')
         #post('v1/customer/cards/'+self.card_id+'/activate')
 
-        #get('v1/customer/cards/'+self.card_id)'''
-
-
+        get('v1/customer/cards/'+self.card_id)
+        pprint.pprint("Getting URL")
         pprint.pprint(response)
-        #response = get https://live.railsbank.com/v1/customer/cards/{{card_id}}
+        response = get('v1/customer/cards/' + self.card_id)
 
 
 
@@ -176,6 +191,7 @@ class RailsbankRequest:
         response = get('v1/customer/cards')
         pprint.pprint(response)
         self.card_id = response[0]['card_id']
+        self.card_program = response[0]['card_programme']
         pprint.pprint('self.card_id = '+self.card_id)
 
 
@@ -209,8 +225,8 @@ class RailsbankRequest:
                     'name': 'Peter',
                     'address': {
                         'address_iso_country': 'GB',
-                        'address_postal_code': "PO5 1OD",
-                        'address_number': "420"
+                        'address_postal_code': "NOT OUR",
+                        'address_number': "42"
                     },
                     'email': 'peter@email.com'
                 }
@@ -222,6 +238,19 @@ class RailsbankRequest:
         Beneficiary is not ready immediately because of ongoing validity checks.
         '''
         response = get('v1/customer/beneficiaries/' + str(self.beneficiary_id) + '/wait')
+
+    def fetchBeneficiary(self):
+        response = get('v1/customer/beneficiaries/', {
+            'holder_id' : self.enduser_id
+        })
+
+
+
+        self.beneficiaries = response['beneficiaries']
+        pprint.pprint(responses)
+        self.beneficiary = self.beneficiaries[0]
+
+
 
 
 
@@ -268,15 +297,26 @@ class RailsbankRequest:
 if __name__ == "__main__":
     myrequest = RailsbankRequest()
     # These are for getting the balance.
-    #myrequest.getEnduser()
+    #myrequest.makeEnduser()
     #myrequest.makeLedger()
     myrequest.fetchLedger()
+    myrequest.showLedger()
     #myrequest.addMoney() #not needed
     print("\nWE ARE NOW GETTING BALANCE\n")
     myrequest.getBalance()
-    print("\nWE ARE NOW DOING PAYMENT\n")
+    #print("\nWE ARE NOW DOING PAYMENT\n")
     # These are for making a payment
+
+    #requirements:
+
+
+
+
+
+
     #myrequest.makeBeneficiary()
+    #print("\nFetching Beneficiaries\n")
+    #myrequest.fetchBeneficiary()
     #myrequest.makePayment()
     # make payment
     # add benificary
@@ -285,7 +325,7 @@ if __name__ == "__main__":
     #get req_card
     print("\nRequesting Card\n")
     myrequest.requestcard()
-    print("\nFetching Card\n")
-    myrequest.fetchCard()
-    print("\nActivating Card\n")
-    myrequest.activateCard()
+    #print("\nFetching Card\n")
+    #myrequest.fetchCard()
+    #print("\nActivating Card\n")
+    #myrequest.activateCard()
