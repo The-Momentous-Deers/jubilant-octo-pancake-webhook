@@ -24,7 +24,8 @@ class User(Base):
 
 class DbManager:
 
-    self.session = Session()
+    def __init__(self):
+        self.session = Session()
 
     def addUser(self, enduser_id, enduser_name, enduser_username, enduser_password, enduser_ledger_id):
             toAdd = self.session.add(User(id= enduser_id, name= enduser_name, username= enduser_username, password=enduser_password, ledger_id = enduser_ledger_id))
@@ -35,7 +36,7 @@ class DbManager:
             if name == nameEntered and password == passEntered:
                 return {id: id, data: {msg: "Successfully Authenticated + " + str(id)}}
               
-        return {None, "Failed To Authenticate"
+        return {None, "Failed To Authenticate"}
 
     def updateLedgerID(self, enduser_id, make_ledger_id):
         toUpdate = self.session.query(User).filter_by(id = enduser_id).first()

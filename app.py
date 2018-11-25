@@ -8,13 +8,13 @@ from flask import make_response
 import json, time, pprint
 from urllib.request import Request, urlopen
 
-from railsbankinterface.railsbankinterface import *
-from User import *
+from railsbankinterface.railsbankinterface import RailsbankRequest
+from db_interface import *
 
 
 # Flask app should start in global layout
 app = Flask(__name__)
-interface = railsbankinterface()
+interface = RailsbankRequest()
 dbmanager = DbManager()
 
 @app.route('/webhook', methods=['POST'])
