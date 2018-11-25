@@ -36,7 +36,7 @@ class DbManager:
         for name, password, id, ledger_id in self.session.query(User.name, User.password, User.id, User.ledger_id):
             if name == nameEntered and password == passEntered:
                 return {"id": id, "data": {"msg": "Successfully Authenticated + " + str(id)}, "ledger_id": ledger_id}
-        return {None, "Failed To Authenticate"}
+        return {"id": None, "data":{"msg": "Failed To Authenticate"}, "ledger_id": None}
 
     def updateLedgerID(self, enduser_id, make_ledger_id):
         toUpdate = self.session.query(User).filter_by(id = enduser_id).first()
