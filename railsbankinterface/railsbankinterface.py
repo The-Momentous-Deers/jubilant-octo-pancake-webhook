@@ -178,7 +178,7 @@ class RailsbankRequest:
         return self.fetchCard()
 
     def fetchCard(self):
-        respone = get('/v1/customer/cards/'+self.card_id)
+        response = get('/v1/customer/cards/'+self.card_id)
         return response['card_status']
 
     def activateCard(self):
