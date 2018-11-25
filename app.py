@@ -37,7 +37,8 @@ def processRequest(req):
     res = req.get("queryResult")
     act = res.get("action")
     parameters = res.get("parameters")
-    outcontext = res.get("outputContext")
+    outcontext = res.get("outputContexts")
+    session = req.get("session")
     print(outcontext)
     data = None
     if act == "bankbalance":
@@ -50,7 +51,9 @@ def processRequest(req):
         print("Authenticating")
         name = parameters.get("given-name") + " " + parameters.get("last-name") 
         dbmanagerResponse = dbmanager.validatePassword(name, parameters.get("password"))
-        res = makeWebhookResult(dbmanagerResponse['data']['msg'], {"userStorage": dbmanagerResponse['id']})
+        outputcontext = [{"name": session + "/contexts/id", "lifespanCount": 5, "parameters": {"id": dbmanagerResponse['id']}}]
+        res = makeWebhookResult(dbmanagerResponse['data']['msg'], outputcontext)
+        print(res)
     elif act == "transaction":
         print("Transaction")
         
@@ -61,10 +64,11 @@ def processRequest(req):
 # Make sure to replace `***EXAMPLE KEY***` in the next line with your api key of form <key_id>#<key_secret>
 api_key = os.environ.get('API_KEY', None)
 
-def makeWebhookResult(speech, data):
+def makeWebhookResult(speech, context):
 
     return {
         "fulfillmentText": speech,
+        "outputContexts": context
     }
 
 if __name__ == '__main__':
