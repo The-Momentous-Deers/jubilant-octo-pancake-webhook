@@ -51,4 +51,5 @@ class DbManager:
 if __name__ == "__main__":
     manager = DbManager()
     #manager.addUser("5bf9f0b5-4962-4e88-a83a-2360df15fe67", "Jonathan Bartlett", "Jonnobrow", "nuggets", "cooties")
+    manager.updateLedgerID("5bf9f0b5-4962-4e88-a83a-2360df15fe67","5bf9f0b5-e206-4265-8d2d-7119838424f3")
 
