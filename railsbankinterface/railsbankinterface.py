@@ -25,8 +25,6 @@ class RailsbankRequest:
         pprint.pprint("self.customer_id = " + self.customer_id)
         pprint.pprint("self.enduser_id = " + self.enduser_id)
 
-
-
     def makeEnduser(self):
         response = post(
             'v1/customer/endusers', {
