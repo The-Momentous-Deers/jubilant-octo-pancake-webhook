@@ -48,14 +48,10 @@ def processRequest(req):
         # Get the ID
         try:
             auth = False
-            for context in outcontext:
-                if (context['parameters'] is not None):
-                    interface.enduser_id = outcontext[0]['parameters']['enduser_id']
-                    interface.ledger_id = outcontext[0]['parameters']['ledger_id']
-                    print("Authenticated")
-                    auth = True
-            if (not auth):
-                Exception("Meep Moop")
+            context = next(item for item in contexts if item["name"] == ("projects/jubilant-octo-pancake-96395/agent/sessions/"+str(session)+"/contexts/id"))
+            interface.enduser_id = outcontext[0]['parameters']['enduser_id']
+            interface.ledger_id = outcontext[0]['parameters']['ledger_id']
+            print("Authenticated")
         except:
             act = "FAILED"
             res = makeWebhookResult("You are not authenticated. Log in using the authenticate command.")
