@@ -22,19 +22,23 @@ class User(Base):
     self.name, self.username, self.password)
 
 
-def addUser(session, enduser_id, enduser_name, enduser_username, enduser_password, enduser_ledger_id):
-        toAdd = session.add(User(id= enduser_id, name= enduser_name, username= enduser_username, password=enduser_password, ledger_id = enduser_ledger_id))
-        session.commit()
+class DbManager:
 
-def validatePassword(session, nameEntered, passEntered):
-    for name, password, id in session.query(User.name, User.password):
-        if name == nameEntered and password == passEntered:
-            return enduser_id
-        
-    return None
+    self.session = Session()
 
-def updateLedgerID(session, enduser_id, make_ledger_id):
-    toUpdate = session.query(User).filter_by(id = enduser_id).first()
-    toUpdate.ledger_id = make_ledger_id
-    session.commit()
+    def addUser(self, enduser_id, enduser_name, enduser_username, enduser_password, enduser_ledger_id):
+            toAdd = self.session.add(User(id= enduser_id, name= enduser_name, username= enduser_username, password=enduser_password, ledger_id = enduser_ledger_id))
+            self.session.commit()
+
+    def validatePassword(self, nameEntered, passEntered):
+        for name, password, id in self.session.query(User).filter_by(name=nameEntered,password=passEntered):
+            if name == nameEntered and password == passEntered:
+                return {id: id, data: {msg: "Successfully Authenticated + " + str(id)}}
+              
+        return {None, "Failed To Authenticate"
+
+    def updateLedgerID(self, enduser_id, make_ledger_id):
+        toUpdate = self.session.query(User).filter_by(id = enduser_id).first()
+        toUpdate.ledger_id = make_ledger_id
+        self.session.commit()
 
