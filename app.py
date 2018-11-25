@@ -88,7 +88,7 @@ def processRequest(req):
         print("Transaction")
     elif act == "card":
         print("Asking for a card")
-        cardRequestStatus = interface.requestCard()
+        cardRequestStatus = interface.requestcard()
         if (cardRequestStatus == "card-status-active"):
             res = makeWebhookResult("Your new card is active.")
         elif(cardRequestStatus == "card-status-failed"):
