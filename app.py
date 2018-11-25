@@ -53,7 +53,7 @@ def processRequest(req):
             interface.enduser_id = context['parameters']['enduser_id']
             interface.ledger_id = context['parameters']['ledger_id']
             print("Authenticated")
-        except Exception, e:
+        except Exception as e:
             print(e)
             act = "FAILED"
             res = makeWebhookResult("You are not authenticated. Log in using the authenticate command.")
