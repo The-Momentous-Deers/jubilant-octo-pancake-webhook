@@ -205,7 +205,21 @@ class RailsbankRequest:
             "asset_type": "gbp",
             "person": {
                 "country_of_residence": ["GB"],
+                "address":{
+                    "address_refinement": "Apartment 77",
+                    "address_number": "42",
+                    "address_street": "London Road",
+                    "address_city": "London",
+                    "address_region": "Greater London",
+                    "address_postal_code": "SW1 4AQ",
+                    "address_iso_country": "GBR"
+                },
+                "date_onboarded": "2015-11-21",
+                "email": "harrison@example.net",
                 "name": name
+                "telephone": "+44 22 626 2626",
+                "date_of_birth": "1970-11-05",
+                "nationality": ["British"]
             },
             "beneficiary_meta": {
                 "foo": "baa",
