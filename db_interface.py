@@ -16,7 +16,7 @@ class User(Base):
     username = Column(String)
     password = Column(String)
     ledger_id = Column(String)
-`   beneficiary_id = Column(String)
+    beneficiary_id = Column(String)
 
     def __repr__(self):
         return "<User(name='%s', username='%s', password='%s')>" % (
