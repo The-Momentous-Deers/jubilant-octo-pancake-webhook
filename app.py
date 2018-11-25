@@ -15,7 +15,7 @@ from db_interface import *
 # Flask app should start in global layout
 app = Flask(__name__)
 interface = RailsbankRequest()
-odbmanager = DbManager()
+dbmanager = DbManager()
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
@@ -37,7 +37,6 @@ def processRequest(req):
     res = req.get("queryResult")
     act = res.get("action")
     parameters = res.get("parameters")
-    print(parameters)
     data = None
     if act == "bankbalance":
         print("Hello, Bank Balance PLS!")
