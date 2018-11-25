@@ -8,11 +8,14 @@ from flask import make_response
 import json, time, pprint
 from urllib.request import Request, urlopen
 
-from railsbankinterface.railsbankinterface import *
+from railsbankinterface.railsbankinterface import RailsbankRequest
+from db_interface import *
+
 
 # Flask app should start in global layout
 app = Flask(__name__)
-interface = railsbankinterface()
+interface = RailsbankRequest()
+dbmanager = DbManager()
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
@@ -33,14 +36,22 @@ def webhook():
 def processRequest(req):
     res = req.get("queryResult")
     act = res.get("action")
-    parameters = req.get("paramters")
+    parameters = res.get("parameters")
     data = None
     if act == "bankbalance":
         print("Hello, Bank Balance PLS!")
         res = makeWebhookResult(interface.getBalance())
     elif act == "beneficiary":
         print("Hello, Add a Beneficiary PLS!")
-        res = makeWebhookResult(interface.makeBeneficiary(res.get("IBAN"), res.get("BIC"), res.get("given-name")))
+        res = makeWebhookResult(interface.makeBeneficiary(parameters.get("IBAN"), parameters.get("BIC"), parameters.get("given-name")))
+    elif act == "auth":
+        print("Authenticating")
+        name = parameters.get("given-name") + " " + parameters.get("last-name") 
+        dbmanagerResponse = dbmanager.validatePassword(name, parameters.get("password"))
+        res = makeWebhookResult(dbmanagerResponse['data']['msg'], {"userStorage": dbmanagerResponse['id']})
+    elif act == "transaction":
+        print("Transaction")
+        
     else:
         res = makeWebhookResult("Sorry, Not sure what you mean")    
     return res
@@ -48,7 +59,8 @@ def processRequest(req):
 # Make sure to replace `***EXAMPLE KEY***` in the next line with your api key of form <key_id>#<key_secret>
 api_key = os.environ.get('API_KEY', None)
 
-def makeWebhookResult(speech):
+def makeWebhookResult(speech, data):
+
     return {
         "fulfillmentText": speech,
     }
