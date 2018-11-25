@@ -47,7 +47,7 @@ def processRequest(req):
         # Get the ID
         try:
             auth = False
-            contextpath = "projects/jubilant-octo-pancake-96395/agent/sessions/"+str(session)+"/contexts/id"
+            contextpath = str(session)+"/contexts/id"
             for item in outcontext:
                 print(item["name"])
                 print(contextpath)
