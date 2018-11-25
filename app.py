@@ -47,9 +47,15 @@ def processRequest(req):
     if act != "auth":
         # Get the ID
         try:
-            interface.enduser_id = outcontext[0]['parameters']['enduser_id']
-            interface.ledger_id = outcontext[0]['parameters']['ledger_id']
-            print("Authenticated")
+            auth = False
+            for context in outcontext:
+                if (context['parameters'] != None)
+                    interface.enduser_id = outcontext[0]['parameters']['enduser_id']
+                    interface.ledger_id = outcontext[0]['parameters']['ledger_id']
+                    print("Authenticated")
+                    auth = True
+            if (not auth):
+                Exception("Meep Moop")
         except:
             act = "FAILED"
             res = makeWebhookResult("You are not authenticated. Log in using the authenticate command.")
