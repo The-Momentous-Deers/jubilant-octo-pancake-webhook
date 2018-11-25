@@ -36,7 +36,7 @@ def webhook():
 def processRequest(req):
     res = req.get("queryResult")
     act = res.get("action")
-    parameters = req.get("paramters")
+    parameters = res.get("paramters")
     data = None
     if act == "bankbalance":
         print("Hello, Bank Balance PLS!")
@@ -46,7 +46,7 @@ def processRequest(req):
         res = makeWebhookResult(interface.makeBeneficiary(parameters.get("IBAN"), parameters.get("BIC"), parameters.get("given-name")))
     elif act == "auth":
         print("Authenticating")
-        name = str(parameters.get("given-name") + " " + parameters.get("last-name")) 
+        name = parameters.get("given-name") + " " + parameters.get("last-name") 
         dbmanagerResponse = dbmanager.validatePassword(name, parameters.get("password"))
         res = makeWebhookResult(dbmanagerResponse.data.msg, {userStorage: dbmanagerResponse.id})
     else:
