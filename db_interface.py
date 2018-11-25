@@ -32,7 +32,7 @@ class DbManager:
             self.session.commit()
 
     def validatePassword(self, nameEntered, passEntered):
-        for name, password, id in self.session.query(User).filter_by(name=nameEntered,password=passEntered):
+        for name, password, id in self.session.query(User.name, User.password):
             if name == nameEntered and password == passEntered:
                 return {id: id, data: {msg: "Successfully Authenticated + " + str(id)}}
               
