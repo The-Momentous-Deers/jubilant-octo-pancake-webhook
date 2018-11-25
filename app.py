@@ -86,6 +86,8 @@ def processRequest(req):
         res = makeWebhookResult(dbmanagerResponse['data']['msg'], outputcontext)
     elif act == "transaction":
         print("Transaction")
+        interface.makePayment()
+        res = makeWebhookResult("Transaction Sent")
     elif act == "card":
         print("Asking for a card")
         cardRequestStatus = interface.requestcard()
