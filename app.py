@@ -43,11 +43,11 @@ def processRequest(req):
         res = makeWebhookResult(interface.getBalance())
     elif act == "beneficiary":
         print("Hello, Add a Beneficiary PLS!")
-        res = makeWebhookResult(interface.makeBeneficiary(res.get("IBAN"), res.get("BIC"), res.get("given-name")))
+        res = makeWebhookResult(interface.makeBeneficiary(parameters.get("IBAN"), parameters.get("BIC"), parameters.get("given-name")))
     elif act == "auth":
         print("Authenticating")
-        name = str(res.get("given-name") + " " + res.get("last-name")) 
-        dbmanagerResponse = dbmanager.validatePassword(name, res.get("password"))
+        name = str(parameters.get("given-name") + " " + parameters.get("last-name")) 
+        dbmanagerResponse = dbmanager.validatePassword(name, parameters.get("password"))
         res = makeWebhookResult(dbmanagerResponse.data.msg, {userStorage: dbmanagerResponse.id})
     else:
         res = makeWebhookResult("Sorry, Not sure what you mean")    

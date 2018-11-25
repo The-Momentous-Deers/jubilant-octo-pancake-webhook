@@ -46,5 +46,5 @@ class DbManager:
 
 if __name__ == "__main__":
     manager = DbManager()
-    manager.addUser("5bf9f0b5-4962-4e88-a83a-2360df15fe67", "Jonathan Bartlett", "Jonnobrow", "nuggets", "cooties")
+    #manager.addUser("5bf9f0b5-4962-4e88-a83a-2360df15fe67", "Jonathan Bartlett", "Jonnobrow", "nuggets", "cooties")
 
