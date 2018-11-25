@@ -8,7 +8,7 @@ base_url = 'https://playlive.railsbank.com/'
 custom_fetch = lambda method, relative_url, body=None: json.loads(urlopen(Request(base_url+relative_url, data=json.dumps(body).encode('utf8'), method=method, headers={'Content-Type': 'application/json', 'Authorization': 'API-Key ' + api_key, 'Accept': 'application/json'})).read().decode('utf-8')); post = lambda url, body=None: custom_fetch("POST", url, body); get = lambda url: custom_fetch("GET", url); put = lambda url, body=None: custom_fetch("PUT", url, body)
 
 # Make sure to replace `***EXAMPLE KEY***` in the next line with your api key of form <key_id>#<key_secret>
-api_key = 'ayzmam4ta3uu3n1quuvq8u0m3kcl4vnx#6sipzuhpoemrwr1kvcgxe0dtjnneryjg0lngqbq9l777j89jsv8th28pferkt43g'
+api_key = 'nkjzi7r487m0tvz1utveuvr1guy4pkhg#gn7xy31t2wem2awxk4w4552qmn3jy4z4rgqtssz3w9ihjm1t1dstf3kyyutlte28'
 
 
 class RailsbankRequest:
@@ -19,8 +19,12 @@ class RailsbankRequest:
         response = get('v1/customer/me')
         # pprint.pprint(response)
         self.customer_id = response['customer_id']
+        self.enduser_id = '5bf9f0b5-4962-4e88-a83a-2360df15fe67'#This allows us to reuse endusers
+        pprint.pprint("self.customer_id = "+self.customer_id)
+        pprint.pprint("self.enduser_id = "+self.enduser_id)
 
 
+    '''#Dont uncomment this code as we have a limit on the number of endusers
     def getEnduser(self):
         response = post(
             'v1/customer/endusers', {
@@ -39,11 +43,13 @@ class RailsbankRequest:
         #pprint.pprint(response)
         #self.enduser_id = response['enduser_id']
 
-        '''
+        """
         Enduser is not ready immediately because of ongoing validity checks.
-        '''
+        """
         #response = get('v1/customer/endusers/' + str(self.enduser_id) + '/wait')
         #pprint.pprint(response)
+    '''#Dont uncomment this code as we have a limit on the number of endusers
+
 
 
     def makeLedger(self):
@@ -101,7 +107,7 @@ class RailsbankRequest:
         response = get('v1/customer/ledgers/' + str(self.ledger_id))
         pprint.pprint(response["amount"])
 
-        
+
 
     def makeBeneficiary(self):
         '''
@@ -179,6 +185,7 @@ class RailsbankRequest:
 
 
     def requestcard(self):
+        '''#Dont uncomment this code as we have a limit on the number of endusers
         #creating a card holding end user
         response = post(
         'v1/customer/endusers',{
@@ -193,6 +200,7 @@ class RailsbankRequest:
         }) #return enduser_id: something
         pprint.pprint(response)
         self.enduser_id = response["enduser_id"]
+        '''#Dont uncomment this code as we have a limit on the number of endusers
         #pprint.pprint(self.enduser_id)
         #finshed creating a card holding end user
         #Issueing an enduser with a EUR ledger
@@ -242,7 +250,7 @@ class RailsbankRequest:
 if __name__ == "__main__":
     myrequest = RailsbankRequest()
     # These are for getting the balance.
-    myrequest.getEnduser()
+    #myrequest.getEnduser()
     #yrequest.makeLedger()
     #myrequest.addMoney() #not needed
     #myrequest.getBalance()
