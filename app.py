@@ -48,10 +48,10 @@ def processRequest(req):
         try:
             auth = False
             contextpath = "projects/jubilant-octo-pancake-96395/agent/sessions/"+str(session)+"/contexts/id"
-            context = next(item for item in contexts if item["name"] == contextpath)
+            context = next(item for item in outcontext if item["name"] == contextpath)
             print(context)
-            interface.enduser_id = outcontext[0]['parameters']['enduser_id']
-            interface.ledger_id = outcontext[0]['parameters']['ledger_id']
+            interface.enduser_id = context['parameters']['enduser_id']
+            interface.ledger_id = context['parameters']['ledger_id']
             print("Authenticated")
         except:
             act = "FAILED"
