@@ -86,7 +86,7 @@ def processRequest(req):
 # Make sure to replace `***EXAMPLE KEY***` in the next line with your api key of form <key_id>#<key_secret>
 api_key = os.environ.get('API_KEY', None)
 
-def makeWebhookResult(speech, context):
+def makeWebhookResult(speech, context=None):
 
     return {
         "fulfillmentText": speech,
