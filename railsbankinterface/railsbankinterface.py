@@ -8,7 +8,9 @@ base_url = 'https://playlive.railsbank.com/'
 custom_fetch = lambda method, relative_url, body=None: json.loads(urlopen(Request(base_url+relative_url, data=json.dumps(body).encode('utf8'), method=method, headers={'Content-Type': 'application/json', 'Authorization': 'API-Key ' + api_key, 'Accept': 'application/json'})).read().decode('utf-8')); post = lambda url, body=None: custom_fetch("POST", url, body); get = lambda url: custom_fetch("GET", url); put = lambda url, body=None: custom_fetch("PUT", url, body)
 
 # Make sure to replace `***EXAMPLE KEY***` in the next line with your api key of form <key_id>#<key_secret>
-api_key = 'nkjzi7r487m0tvz1utveuvr1guy4pkhg#gn7xy31t2wem2awxk4w4552qmn3jy4z4rgqtssz3w9ihjm1t1dstf3kyyutlte28'
+#api_key = 'ayzmam4ta3uu3n1quuvq8u0m3kcl4vnx#6sipzuhpoemrwr1kvcgxe0dtjnneryjg0lngqbq9l777j89jsv8th28pferkt43g' #play key
+api_key = 'nkjzi7r487m0tvz1utveuvr1guy4pkhg#gn7xy31t2wem2awxk4w4552qmn3jy4z4rgqtssz3w9ihjm1t1dstf3kyyutlte28' #play live key
+
 
 
 class RailsbankRequest:
@@ -213,24 +215,36 @@ class RailsbankRequest:
         Creating beneficiary for our enduser.
         '''
         response = post(
-            'v1/customer/beneficiaries', {
-                'holder_id': self.enduser_id,
-                'asset_class': 'currency',
-                'asset_type': 'eur',
-                #'iban': 'SK4402005678901234567890',
-                #'bic_swift': 'SUBASKBX',
-                'uk_account_number': '12345678',
-                'uk_sort_code': '123434',
-                'person': {
-                    'name': 'Peter',
-                    'address': {
-                        'address_iso_country': 'GB',
-                        'address_postal_code': "NOT OUR",
-                        'address_number': "42"
-                    },
-                    'email': 'peter@email.com'
-                }
-            })
+        {
+            "uk_account_number": "12345678",
+            "uk_sort_code": "123456",
+            "holder_id": self.enduser_id,
+            "asset_class": "currency",
+            "asset_type": "gbp",
+            "person": {
+                "country_of_residence": ["GB"],
+                "address":{
+                    "address_refinement": "Apartment 77",
+                    "address_number": "42",
+                    "address_street": "London Road",
+                    "address_city": "London",
+                    "address_region": "Greater London",
+                    "address_postal_code": "SW1 4AQ",
+                    "address_iso_country": "GBR"
+                },
+                "date_onboarded": "2015-11-21",
+                "email": "harrison@example.net",
+                "name": "Harrison Smith",
+                "telephone": "+44 22 626 2626",
+                "date_of_birth": "1970-11-05",
+                "nationality": ["British"]
+            },
+            "beneficiary_meta": {
+                "foo": "baa",
+                "our_salesforce_reference": "http://na1.salesforce.com/5003000000D8cuI"
+            }
+        })
+
         pprint.pprint(response)
         self.beneficiary_id = response['beneficiary_id']
 
@@ -240,17 +254,12 @@ class RailsbankRequest:
         response = get('v1/customer/beneficiaries/' + str(self.beneficiary_id) + '/wait')
 
     def fetchBeneficiary(self):
-        response = get('v1/customer/beneficiaries/', {
-            'holder_id' : self.enduser_id
-        })
-
-
-
-        self.beneficiaries = response['beneficiaries']
-        pprint.pprint(responses)
-        self.beneficiary = self.beneficiaries[0]
-
-
+        response = get('v1/customer/beneficiaries/')
+        #self.beneficiaries = response['beneficiaries']
+        pprint.pprint("Beneficiary list = ")
+        pprint.pprint(response)
+        beneficiaries = response
+        #self.beneficiary = response[0]
 
 
 
@@ -309,14 +318,10 @@ if __name__ == "__main__":
 
     #requirements:
 
-
-
-
-
-
-    #myrequest.makeBeneficiary()
-    #print("\nFetching Beneficiaries\n")
-    #myrequest.fetchBeneficiary()
+    print("\nMaking Beneficiaries\n")
+    myrequest.makeBeneficiary()
+    print("\nFetching Beneficiaries\n")
+    myrequest.fetchBeneficiary()
     #myrequest.makePayment()
     # make payment
     # add benificary
