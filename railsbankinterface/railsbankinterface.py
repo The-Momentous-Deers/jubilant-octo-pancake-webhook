@@ -106,6 +106,7 @@ class RailsbankRequest:
     def getBalance(self):
         response = get('v1/customer/ledgers/' + str(self.ledger_id))
         pprint.pprint(response["amount"])
+        return response["amount"]
 
 
 
