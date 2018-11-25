@@ -49,6 +49,7 @@ def processRequest(req):
         try:
             interface.enduser_id = outcontext[0]['parameters']['enduser_id']
             interface.ledger_id = outcontext[0]['parameters']['ledger_id']
+            print("Authenticated")
         except:
             act = "FAILED"
             res = makeWebhookResult("You are not authenticated. Log in using the authenticate command.")
@@ -56,7 +57,7 @@ def processRequest(req):
     data = None
     if act == "bankbalance":
         print("Hello, Bank Balance PLS!")
-        res = makeWebhookResult(interface.getBalance())
+        res = makeWebhookResult("Your balance is " + interface.getBalance() + " pounds")
     elif act == "beneficiary":
         print("Hello, Add a Beneficiary PLS!")
         res = makeWebhookResult(interface.makeBeneficiary(parameters.get("IBAN"), parameters.get("BIC"), parameters.get("given-name")))
@@ -75,19 +76,19 @@ def processRequest(req):
             }
         ]
         res = makeWebhookResult(dbmanagerResponse['data']['msg'], outputcontext)
-        print(res)
     elif act == "transaction":
         print("Transaction")
-        
     else:
-        res = makeWebhookResult("Sorry, Not sure what you mean")    
+        res = makeWebhookResult("Sorry, Not sure what you mean")
+     
     return res
 
 # Make sure to replace `***EXAMPLE KEY***` in the next line with your api key of form <key_id>#<key_secret>
 api_key = os.environ.get('API_KEY', None)
 
 def makeWebhookResult(speech, context=None):
-
+    print("Speech: " + speech)
+    print("Context: " + context)
     return {
         "fulfillmentText": speech,
         "outputContexts": context
