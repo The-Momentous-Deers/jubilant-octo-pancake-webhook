@@ -174,16 +174,10 @@ class RailsbankRequest:
         self.card_id = response["card_id"]
         pprint.pprint('self.card_id = ')
         pprint.pprint(self.card_id)
-        #Make sure that you have rails-bank debit card bought
-        #activating cards
-        pprint.pprint('v1/customer/cards/'+self.card_id+'/activate')
-        #response = post('v1/customer/cards/'+self.card_id+'/activate')
-        #post('v1/customer/cards/'+self.card_id+'/activate')
-
-        get('v1/customer/cards/'+self.card_id)
-        pprint.pprint("Getting URL")
-        pprint.pprint(response)
-        response = get('v1/customer/cards/' + self.card_id)
+        # fetch the card
+        fetchCard()
+        # Activate the card
+        return activateCard()
 
 
 
@@ -197,8 +191,8 @@ class RailsbankRequest:
 
 
     def activateCard(self):
-        response = post('v1/customer/cards/'+self.card+'/activate')
-        pprint.pprint(response["card_status"])
+        response = post('v1/customer/cards/'+self.card_id+'/activate')
+        return response["card_status"]
 
 
 

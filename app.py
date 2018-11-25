@@ -86,9 +86,17 @@ def processRequest(req):
         res = makeWebhookResult(dbmanagerResponse['data']['msg'], outputcontext)
     elif act == "transaction":
         print("Transaction")
+    elif act == "card":
+        print("Asking for a card")
+        cardRequestStatus = interface.requestCard()
+        if (cardRequestStatus == "card-status-active"):
+            res = makeWebhookResult("Your new card is active.")
+        elif(cardRequestStatus == "card-status-failed"):
+            res = makeWebhookResult("Failed to create a new debit card.")
+        else:
+            res = makeWebhookResult("Not sure what happened, try again later.")
     else:
         res = makeWebhookResult("Sorry, Not sure what you mean")
-     
     return res
 
 # Make sure to replace `***EXAMPLE KEY***` in the next line with your api key of form <key_id>#<key_secret>
