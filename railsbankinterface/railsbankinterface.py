@@ -175,7 +175,11 @@ class RailsbankRequest:
         pprint.pprint('self.card_id = ')
         pprint.pprint(self.card_id)
         # Activate the card
-        return self.activateCard()
+        return self.fetchCard()
+
+    def fetchCard(self):
+        respone = get('/v1/customer/cards/'+self.card_id)
+        return response['card_status']
 
     def activateCard(self):
         response = post('v1/customer/cards/'+self.card_id+'/activate')
