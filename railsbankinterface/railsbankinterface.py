@@ -175,9 +175,9 @@ class RailsbankRequest:
         pprint.pprint('self.card_id = ')
         pprint.pprint(self.card_id)
         # fetch the card
-        fetchCard()
+        self.fetchCard()
         # Activate the card
-        return activateCard()
+        return self.activateCard()
 
 
 
