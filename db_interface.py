@@ -21,10 +21,13 @@ class User(Base):
     self.name, self.fullname, self.password)
 
 
-
 def addUser(session, enduser_id, enduser_name, enduser_username, enduser_password):
         toAdd = session.add(User(id= enduser_id, name= enduser_name, username= enduser_username, password=enduser_password))
         session.commit()
 
-
-addUser(session)
+def validatePassword(session, nameEntered, passEntered):
+    for name, password, id in session.query(User.name, User.password):
+        if name == nameEntered and password == passEntered:
+            return enduser_id
+        
+    return None
