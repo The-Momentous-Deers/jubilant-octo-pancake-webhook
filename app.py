@@ -36,7 +36,7 @@ def webhook():
 def processRequest(req):
     res = req.get("queryResult")
     act = res.get("action")
-    parameters = res.get("paramters")
+    parameters = res.get("parameters")
     print(parameters)
     data = None
     if act == "bankbalance":
