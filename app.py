@@ -37,6 +37,7 @@ def processRequest(req):
     res = req.get("queryResult")
     act = res.get("action")
     parameters = res.get("paramters")
+    print(parameters)
     data = None
     if act == "bankbalance":
         print("Hello, Bank Balance PLS!")
