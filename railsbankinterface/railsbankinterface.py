@@ -263,7 +263,7 @@ class RailsbankRequest:
         response = post(
             'v1/customer/transactions', {
                 'ledger_from_id': self.ledger_id,
-                'beneficiary_id': self.beneficiary_id,
+                'beneficiary_id': "5bfa89ec-062d-471f-9cf3-93f36c6da3f1",
                 'payment_type': 'payment-type-EU-SEPA-Step2',
                 'amount': '2'
                 })
