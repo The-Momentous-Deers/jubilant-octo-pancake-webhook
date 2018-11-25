@@ -86,8 +86,8 @@ class RailsbankRequest:
         #pprint.pprint(response)
         response = get('v1/customer/ledgers/' + str(ledger_id) + '/wait')
         pprint.pprint(response)
-        uk_sort_code = response['uk_sort_code']
-        uk_account_number = response['uk_account_number']
+        self.uk_sort_code = response['uk_sort_code']
+        self.uk_account_number = response['uk_account_number']
         '''
         Crediting the ledger with 10 euro.
         '''
@@ -215,9 +215,10 @@ class RailsbankRequest:
         Creating beneficiary for our enduser.
         '''
         response = post(
+        'v1/customer/beneficiaries',
         {
-            "uk_account_number": "12345678",
-            "uk_sort_code": "123456",
+            "uk_account_number": self.uk_account_number,
+            "uk_sort_code": self.uk_sort_code,
             "holder_id": self.enduser_id,
             "asset_class": "currency",
             "asset_type": "gbp",
@@ -307,7 +308,7 @@ if __name__ == "__main__":
     myrequest = RailsbankRequest()
     # These are for getting the balance.
     #myrequest.makeEnduser()
-    #myrequest.makeLedger()
+    myrequest.makeLedger()
     myrequest.fetchLedger()
     myrequest.showLedger()
     #myrequest.addMoney() #not needed
