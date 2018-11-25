@@ -216,7 +216,7 @@ class RailsbankRequest:
                 },
                 "date_onboarded": "2015-11-21",
                 "email": "harrison@example.net",
-                "name": name
+                "name": name,
                 "telephone": "+44 22 626 2626",
                 "date_of_birth": "1970-11-05",
                 "nationality": ["British"]
