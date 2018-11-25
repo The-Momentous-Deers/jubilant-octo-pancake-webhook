@@ -22,6 +22,11 @@ class RailsbankRequest:
         # pprint.pprint(response)
         self.customer_id = response['customer_id']
         self.enduser_id = '5bf9f0b5-4962-4e88-a83a-2360df15fe67'#This allows us to reuse endusers
+        self.ledger1_id =  '5bfa8b1c-b565-4afd-b1eb-26975e6cdc84'
+        self.ledger2_id =  '5bfa89ec-062d-471f-9cf3-93f36c6da3f1'
+        self.ledger_id = self.ledger1_id
+
+
         pprint.pprint("self.customer_id = " + self.customer_id)
         pprint.pprint("self.enduser_id = " + self.enduser_id)
 
@@ -64,7 +69,7 @@ class RailsbankRequest:
         '''
         response = post(
             'v1/customer/ledgers', {
-	           "holder_id": self.customer_id,
+	           "holder_id": self.enduser_id,
                "partner_product": "PayrNet-GBP-1",
 	           "asset_class": "currency",
 	           "asset_type": "gbp",
@@ -111,7 +116,7 @@ class RailsbankRequest:
         pprint.pprint("Printing Fetch Ledger Response")
         pprint.pprint(response)
         ledgerlist=response["ledgers"]
-        self.ledger_id = ledgerlist[0]['ledger_id']
+        #self.ledger_id = ledgerlist[0]['ledger_id']
         #self.holder_id = response['holder_id']
         #pprint.pprint("All holder_id = " + self.holder_id)
         pprint.pprint("All customer_id = " + self.customer_id)
@@ -191,16 +196,17 @@ class RailsbankRequest:
 
     def fetchCard(self):
         response = get('v1/customer/cards')
+        response = response[0]
         pprint.pprint(response)
-        self.card_id = response[0]['card_id']
-        self.card_program = response[0]['card_programme']
+        self.card_id = response['card_id']
+        self.card_programme = response['card_programme']
+        self.card_status = response['card_status']
         pprint.pprint('self.card_id = '+self.card_id)
 
 
 
     def activateCard(self):
-        response = post('v1/customer/cards/'+self.card+'/activate')
-        pprint.pprint(response["card_status"])
+        response = post('v1/customer/cards/' + self.card_id + '/activate')
 
 
 
@@ -266,14 +272,14 @@ class RailsbankRequest:
 
     def makePayment(self):
         '''
-        Creating 2 euro transaction from the ledger to the beneficiary.
+        Creating 2 gbp transaction from the ledger to the beneficiary.
         '''
         response = post(
             'v1/customer/transactions', {
                 'ledger_from_id': self.ledger_id,
                 'beneficiary_id': self.beneficiary_id,
                 'payment_type': 'payment-type-EU-SEPA-Step2',
-                'amount': '2'
+                'amount': '0'
                 })
         pprint.pprint(response)
         transaction_id = response['transaction_id']
@@ -287,7 +293,8 @@ class RailsbankRequest:
 
 
 
-    def addMoney(self):
+        """
+        def addMoney(self):
         response = post(
             'dev/customer/transactions/receive', {
                 'amount': 10,
@@ -301,6 +308,7 @@ class RailsbankRequest:
         time.sleep(10)
         response = get('v1/customer/transactions/' + str(transaction_receive_id))
         pprint.pprint(response)
+        """
 
 
 
@@ -308,7 +316,7 @@ if __name__ == "__main__":
     myrequest = RailsbankRequest()
     # These are for getting the balance.
     #myrequest.makeEnduser()
-    myrequest.makeLedger()
+    #myrequest.makeLedger()
     myrequest.fetchLedger()
     myrequest.showLedger()
     #myrequest.addMoney() #not needed
@@ -319,8 +327,8 @@ if __name__ == "__main__":
 
     #requirements:
 
-    print("\nMaking Beneficiaries\n")
-    myrequest.makeBeneficiary()
+    #print("\nMaking Beneficiaries\n")
+    #myrequest.makeBeneficiary()
     print("\nFetching Beneficiaries\n")
     myrequest.fetchBeneficiary()
     #myrequest.makePayment()
@@ -329,8 +337,8 @@ if __name__ == "__main__":
     # request card
     # notify when money enters account
     #get req_card
-    print("\nRequesting Card\n")
-    myrequest.requestcard()
+    #print("\nRequesting Card\n")
+    #myrequest.requestcard()
     #print("\nFetching Card\n")
     #myrequest.fetchCard()
     #print("\nActivating Card\n")
