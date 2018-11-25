@@ -40,8 +40,22 @@ def processRequest(req):
     outcontext = res.get("outputContexts")
     session = req.get("session")
     print(outcontext)
+
+    interface.enduser_id = ""
+    interface.ledger_id = ""
+
+    if act != "auth":
+        # Get the ID
+        try:
+            interface.enduser_id = outcontext[0]['parameters']['enduser_id']
+            interface.ledger_id = outcontext[0]['parameters']['ledger_id']
+        except:
+            act = "FAILED"
+            res = makeWebhookResult("You are not authenticated. Log in using the authenticate command.")
+    
     data = None
     if act == "bankbalance":
+        interface.ledger_id = outcontext[0]['parameters']['id']
         print("Hello, Bank Balance PLS!")
         res = makeWebhookResult(interface.getBalance())
     elif act == "beneficiary":
@@ -51,7 +65,16 @@ def processRequest(req):
         print("Authenticating")
         name = parameters.get("given-name") + " " + parameters.get("last-name") 
         dbmanagerResponse = dbmanager.validatePassword(name, parameters.get("password"))
-        outputcontext = [{"name": session + "/contexts/id", "lifespanCount": 5, "parameters": {"id": dbmanagerResponse['id']}}]
+        outputcontext = [
+            {
+                "name": session + "/contexts/id", 
+                "lifespanCount": 5, 
+                "parameters": {
+                    "enduser_id": dbmanagerResponse['id'],
+                    "ledger_id": dbmanangerResponse['ledger_id']
+                }
+            }
+        ]
         res = makeWebhookResult(dbmanagerResponse['data']['msg'], outputcontext)
         print(res)
     elif act == "transaction":

@@ -33,10 +33,9 @@ class DbManager:
             self.session.commit()
 
     def validatePassword(self, nameEntered, passEntered):
-        for name, password, id in self.session.query(User.name, User.password, User.id):
+        for name, password, id, ledger_id in self.session.query(User.name, User.password, User.id, User.ledger_id):
             if name == nameEntered and password == passEntered:
-                return {"id": id, "data": {"msg": "Successfully Authenticated + " + str(id)}}
-              
+                return {"id": id, "data": {"msg": "Successfully Authenticated + " + str(id)}, "ledger_id": ledger_id}
         return {None, "Failed To Authenticate"}
 
     def updateLedgerID(self, enduser_id, make_ledger_id):
