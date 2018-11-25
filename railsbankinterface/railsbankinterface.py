@@ -20,8 +20,8 @@ class RailsbankRequest:
         # pprint.pprint(response)
         self.customer_id = response['customer_id']
         self.enduser_id = '5bf9f0b5-4962-4e88-a83a-2360df15fe67'#This allows us to reuse endusers
-        pprint.pprint("self.customer_id = "+self.customer_id)
-        pprint.pprint("self.enduser_id = "+self.enduser_id)
+        pprint.pprint("self.customer_id = " + self.customer_id)
+        pprint.pprint("self.enduser_id = " + self.enduser_id)
 
 
     '''#Dont uncomment this code as we have a limit on the number of endusers
@@ -56,18 +56,17 @@ class RailsbankRequest:
         '''
         Creating ledger assigned to our enduser and assigning iban to it.
         '''
-        bank_example_product = 'PayrNet-GBP-1'
         response = post(
             'v1/customer/ledgers', {
-                'holder_id': self.enduser_id, # this was self.enduser_id
-                'partner_product': bank_example_product,
-                'asset_class': 'currency',
-                'asset_type': 'gbp',
-                'ledger-type': 'ledger-type-single-user',
-                'ledger-who-owns-assets': 'ledger-assets-owned-by-me',
-                'ledger-primary-use-types': ['ledger-primary-use-types-payments'],
-                'ledger-t-and-cs-country-of-jurisdiction': 'GB'
-            })
+	           "holder_id": self.customer_id,
+               "partner_product": "PayrNet-GBP-1",
+	           "asset_class": "currency",
+	           "asset_type": "gbp",
+               "ledger_type": "ledger-type-omnibus",
+               "ledger_who_owns_assets": "ledger-assets-owned-by-me",
+               "ledger_primary_use_types": ["ledger-primary-use-types-payments"],
+               "ledger_t_and_cs_country_of_jurisdiction": "GBR"
+        })
         # pprint.pprint(response)
         self.ledger_id = response['ledger_id']
         # pprint.pprint(response)
@@ -99,7 +98,13 @@ class RailsbankRequest:
         #response = get('v1/customer/transactions/' + str(transaction_receive_id))
         #pprint.pprint(response)
 
-
+    def fetchLedger(self):
+        response = get('v1/customer/endusers/'+self.enduser_id)
+        ledgerlist=response["ledgers"]
+        self.ledger_id = ledgerlist[0]['ledger_id']
+        pprint.pprint("All ledgers are")
+        pprint.pprint(ledgerlist)
+        pprint.pprint("self.ledger_id = " + self.ledger_id)
 
 
 
@@ -141,12 +146,6 @@ class RailsbankRequest:
         response = get('v1/customer/beneficiaries/' + str(self.beneficiary_id) + '/wait')
 
 
-
-
-
-
-
-
     def makePayment(self):
         '''
         Creating 2 euro transaction from the ledger to the beneficiary.
@@ -167,6 +166,7 @@ class RailsbankRequest:
         time.sleep(10)
         response = get('v1/customer/transactions/' + str(transaction_id))
         pprint.pprint(response)
+
 
     def addMoney(self):
         response = post(
@@ -204,24 +204,25 @@ class RailsbankRequest:
         #pprint.pprint(self.enduser_id)
         #finshed creating a card holding end user
         #Issueing an enduser with a EUR ledger
-        response = post(
-        'v1/customer/ledgers',{
-            "holder_id": self.enduser_id,
-	        "partner_product": "PayrNet-GBP-1",
-	        "asset_class": "currency",
-	        "asset_type": "gbp",
-            "ledger_type": "ledger-type-single-user",
-            "ledger_who_owns_assets": "ledger-assets-owned-by-me",
-            "ledger_primary_use_types": ["ledger-primary-use-types-payments"],
-            "ledger_t_and_cs_country_of_jurisdiction": "GBR"
-            })#returns ledger_id in a dictionary
-        self.ledger_id = response['ledger_id']
+        #response = post(
+        #'v1/customer/ledgers',{
+        #    "holder_id": self.enduser_id,
+	    #    "partner_product": "PayrNet-GBP-1",
+	    #    "asset_class": "currency",
+	    #    "asset_type": "gbp",
+        #    "ledger_type": "ledger-type-single-user",
+        #    "ledger_who_owns_assets": "ledger-assets-owned-by-me",
+        #    "ledger_primary_use_types": ["ledger-primary-use-types-payments"],
+        #    "ledger_t_and_cs_country_of_jurisdiction": "GBR"
+        #    })#returns ledger_id in a dictionary
+        #self.ledger_id = response['ledger_id']
         pprint.pprint("\nGonna print the first ledger ID\n")
         pprint.pprint(self.ledger_id)
         #Finished issueing an enduser with a EUR ledger
         #issueing the card
         pprint.pprint("self.ledger_id = ")
         pprint.pprint(self.ledger_id)
+        pprint.pprint("\nISSUEING CARD\n")
         response = post(
         'v1/customer/cards',  {
             "ledger_id": self.ledger_id,
@@ -251,9 +252,11 @@ if __name__ == "__main__":
     myrequest = RailsbankRequest()
     # These are for getting the balance.
     #myrequest.getEnduser()
-    #yrequest.makeLedger()
+    #myrequest.makeLedger()
+    myrequest.fetchLedger()
     #myrequest.addMoney() #not needed
-    #myrequest.getBalance()
+    print("\nWE ARE NOW GETTING BALANCE\n")
+    myrequest.getBalance()
     print("\nWE ARE NOW DOING PAYMENT\n")
     # These are for making a payment
     #myrequest.makeBeneficiary()
