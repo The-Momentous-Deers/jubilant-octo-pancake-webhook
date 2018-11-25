@@ -48,7 +48,9 @@ def processRequest(req):
         # Get the ID
         try:
             auth = False
-            context = next(item for item in contexts if item["name"] == ("projects/jubilant-octo-pancake-96395/agent/sessions/"+str(session)+"/contexts/id"))
+            contextpath = "projects/jubilant-octo-pancake-96395/agent/sessions/"+str(session)+"/contexts/id"
+            print(contextpath)
+            context = next(item for item in contexts if item["name"] == contextpath
             interface.enduser_id = outcontext[0]['parameters']['enduser_id']
             interface.ledger_id = outcontext[0]['parameters']['ledger_id']
             print("Authenticated")
