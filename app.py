@@ -57,9 +57,6 @@ api_key = os.environ.get('API_KEY', None)
 
 def makeWebhookResult(speech, data):
 
-    if (data)
-
-
     return {
         "fulfillmentText": speech,
     }
