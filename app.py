@@ -53,6 +53,7 @@ def processRequest(req):
         except:
             act = "FAILED"
             res = makeWebhookResult("You are not authenticated. Log in using the authenticate command.")
+            return res
     
     data = None
     if act == "bankbalance":
@@ -88,7 +89,7 @@ api_key = os.environ.get('API_KEY', None)
 
 def makeWebhookResult(speech, context=None):
     print("Speech: " + speech)
-    print("Context: " + context)
+    print("Context: " + str(context))
     return {
         "fulfillmentText": speech,
         "outputContexts": context
