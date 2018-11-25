@@ -49,7 +49,7 @@ def processRequest(req):
         try:
             auth = False
             for context in outcontext:
-                if (context['parameters'] != None)
+                if (context['parameters'] is not None):
                     interface.enduser_id = outcontext[0]['parameters']['enduser_id']
                     interface.ledger_id = outcontext[0]['parameters']['ledger_id']
                     print("Authenticated")
