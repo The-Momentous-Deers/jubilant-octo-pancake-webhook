@@ -58,7 +58,7 @@ def processRequest(req):
     data = None
     if act == "bankbalance":
         print("Hello, Bank Balance PLS!")
-        res = makeWebhookResult("Your balance is " + interface.getBalance() + " pounds")
+        res = makeWebhookResult("Your balance is " + str(interface.getBalance()) + " pounds")
     elif act == "beneficiary":
         print("Hello, Add a Beneficiary PLS!")
         res = makeWebhookResult(interface.makeBeneficiary(parameters.get("IBAN"), parameters.get("BIC"), parameters.get("given-name")))
