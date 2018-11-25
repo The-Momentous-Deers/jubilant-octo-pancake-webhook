@@ -55,7 +55,6 @@ def processRequest(req):
     
     data = None
     if act == "bankbalance":
-        interface.ledger_id = outcontext[0]['parameters']['id']
         print("Hello, Bank Balance PLS!")
         res = makeWebhookResult(interface.getBalance())
     elif act == "beneficiary":
