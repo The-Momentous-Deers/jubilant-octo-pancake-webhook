@@ -88,8 +88,8 @@ def processRequest(req):
 api_key = os.environ.get('API_KEY', None)
 
 def makeWebhookResult(speech, context=None):
-    print("Speech: " + speech)
-    print("Context: " + str(context))
+    #print("Speech: " + speech)
+    #print("Context: " + str(context))
     return {
         "fulfillmentText": speech,
         "outputContexts": context
